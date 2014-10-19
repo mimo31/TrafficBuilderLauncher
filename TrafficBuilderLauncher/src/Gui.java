@@ -1,10 +1,10 @@
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.JFrame;
 
 
@@ -15,9 +15,10 @@ public class Gui extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(Toolkit.getDefaultToolkit().getScreenSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2);
 		this.setLocation(this.getWidth() / 2, this.getHeight() / 2);
+		this.setMinimumSize(new Dimension(200, 200));
+		this.setVisible(true);
 		this.addMouseListener(new MouseEvents());
 		this.addComponentListener(new ComponentEvents());
-		this.setVisible(true);
 	}
 	
 	public static void updateGui() {
