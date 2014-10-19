@@ -5,6 +5,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.JFrame;
 
 
@@ -31,8 +32,11 @@ public class Gui extends JFrame{
 	public class MouseEvents implements MouseListener{
 
 		
-		public void mouseClicked(MouseEvent arg0) {
+		public void mouseClicked(MouseEvent e) {
 			
+			if(5 < e.getX() && e.getX() < 145 && Variables.height - 65 < e.getY() && e.getY() < Variables.height - 5){
+				
+			}
 			
 		}
 
