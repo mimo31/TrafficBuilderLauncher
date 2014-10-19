@@ -7,7 +7,6 @@ import javax.swing.JComponent;
 
 public class StartClass {
 	public static void main(String[] args){
-		Variables.updateApproved = true;
 		Variables.myGui = new Gui();
 		Gui.updateGui();
 }
