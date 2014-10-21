@@ -3,18 +3,16 @@ import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import org.omg.CORBA.portable.InputStream;
 
 
 public class Functions {
@@ -55,19 +53,20 @@ public class Functions {
 		}
 	}
 	
-	public static byte[] downloadFile(String address){
-		byte[] output = null;
-		try {
-			URL url = new URL(address);
-			java.io.InputStream inStream = url.openStream();
-			int length = -1;
-			while ((length = inStream.read(output)) > -1){
-				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	public static byte[] downloadFile(String address) throws Exception{
+		URL url = new URL(address);
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		InputStream is = url.openStream();
+		
+		byte[] data = new byte[1024];
+		int nRead;
+		
+		
+		while ((nRead = is.read(data, 0, data.length)) != -1){
+			buffer.write(data, 0, nRead);
 		}
-		return output;
+		buffer.flush();
+		return buffer.toByteArray();
 	}
 
 	public static String readTextFile(String path){
