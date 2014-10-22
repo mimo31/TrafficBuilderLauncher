@@ -2,9 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
 
@@ -24,11 +22,6 @@ public class StartClass {
 			graph2.setColor(Color.black);
 			graph2.setFont(new Font("Arial", Font.BOLD, 20));
 			graph2.drawString("Play", 55, (int) Variables.height - 25);
-			try {
-				graph2.drawImage(ImageIO.read(new ByteArrayInputStream(Functions.downloadFile("http://195.113.84.161/~xfukv01/TimetableBigger.PNG"))), null, 100 , 100);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		
 	}

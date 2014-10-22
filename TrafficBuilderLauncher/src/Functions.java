@@ -14,8 +14,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
 public class Functions {
+	public static Path getInGameDirPath(String InDirPath){
+		return Paths.get(System.getenv("APPDATA") + "\\TrafficBuilder" + InDirPath);
+	}
+	
 	public static Rectangle getStringBounds(Graphics2D g2, String str, float x, float y) {
         FontRenderContext frc = g2.getFontRenderContext();
         GlyphVector gv = g2.getFont().createGlyphVector(frc, str);
