@@ -23,8 +23,8 @@ public class Gui extends JFrame{
 	
 	public static void updateGui(){
 		Container Test = Variables.myGui.getContentPane();
-		Variables.height = (int) Test.getSize().getHeight();
-		Variables.width = (int) Test.getSize().getWidth();
+		Variables.height = Test.getHeight();
+		Variables.width = Test.getWidth();
 		Variables.myGui.add(new StartClass.paintIt());
 	}
 	
