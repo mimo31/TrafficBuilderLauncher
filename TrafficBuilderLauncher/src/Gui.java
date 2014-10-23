@@ -5,8 +5,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-
 import javax.swing.JFrame;
 
 
@@ -19,14 +17,14 @@ public class Gui extends JFrame{
 		this.setLocation(this.getWidth() / 2, this.getHeight() / 2);
 		this.setMinimumSize(new Dimension(200, 200));
 		this.setVisible(true);
-		this.addMouseListener(new MouseEvents());
+		this.getContentPane().addMouseListener(new MouseEvents());
 		this.addComponentListener(new ComponentEvents());
 	}
 	
-	public static void updateGui() {
+	public static void updateGui(){
 		Container Test = Variables.myGui.getContentPane();
-		Variables.height = Test.getHeight();
-		Variables.width = Test.getWidth();
+		Variables.height = (int) Test.getSize().getHeight();
+		Variables.width = (int) Test.getSize().getWidth();
 		Variables.myGui.add(new StartClass.paintIt());
 	}
 	
@@ -34,11 +32,16 @@ public class Gui extends JFrame{
 
 		
 		public void mouseClicked(MouseEvent e){
-			
-			if(5 < e.getX() && e.getX() < 145 && Variables.height - 65 < e.getY() && e.getY() < Variables.height - 5){
+			System.out.println("Breakpoint1");
+			System.out.println(e.getPoint().getX());
+			System.out.println(e.getPoint().getY());
+			System.out.println(Variables.width);
+			System.out.println(Variables.height);
+			if(5 < e.getPoint().getX() && e.getPoint().getX() < 145 && Variables.height - 65 < e.getPoint().getY() && e.getPoint().getY() < Variables.height - 5){
 				try {
+					System.out.println("Breakpoint2");
 					FileDriver.initializeFiles();
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
