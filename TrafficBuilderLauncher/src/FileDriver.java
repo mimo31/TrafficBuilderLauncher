@@ -25,18 +25,16 @@ public class FileDriver  {
 			Functions.writeTextToFile("Default", System.getenv("APPDATA") + "\\TrafficBuilder\\SmallData\\LatestResources.txt", true);
 			Functions.writeBytesToFile(Functions.downloadFile("http:\\gjk.cz\\~xfukv01\\TrafficBuilder\\main.jar"), System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar", true);
 		}
-		Runtime.getRuntime().exec("java -jar " + System.getenv("APPDATA") + "\\TrafficBuilder\\Resources\\Game\\main.jar");
+		Runtime.getRuntime().exec("java -jar " + System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar");;
 		System.exit(0);
 	}
 	
 	public static void getResource(String InternetName, String LocalName) throws Exception{
 		Functions.writeBytesToFile(Functions.downloadFile("http:\\gjk.cz\\~xfukv01\\TrafficBuilder\\" + InternetName), System.getenv("APPDATA") + "TrafficBuilder\\Resources\\Defualt\\" + LocalName, true);
-		System.out.println("Breakpoint2");
 	}
 	
 	public static void downloadDefaultResources() throws Exception{
 			Files.createDirectory(Functions.getInGameDirPath("\\Resources\\Default"));
-			System.out.println("Breakpoint");
 			getResource("Font.ttf", "Font.ttf");
 	}
 }

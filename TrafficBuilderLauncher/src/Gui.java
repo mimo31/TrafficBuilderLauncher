@@ -32,14 +32,8 @@ public class Gui extends JFrame{
 
 		
 		public void mouseClicked(MouseEvent e){
-			System.out.println("Breakpoint1");
-			System.out.println(e.getPoint().getX());
-			System.out.println(e.getPoint().getY());
-			System.out.println(Variables.width);
-			System.out.println(Variables.height);
 			if(5 < e.getPoint().getX() && e.getPoint().getX() < 145 && Variables.height - 65 < e.getPoint().getY() && e.getPoint().getY() < Variables.height - 5){
 				try {
-					System.out.println("Breakpoint2");
 					FileDriver.initializeFiles();
 				} catch (Exception e1) {
 					e1.printStackTrace();
