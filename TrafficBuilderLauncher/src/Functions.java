@@ -4,6 +4,9 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -69,6 +72,21 @@ public class Functions {
 			buffer.write(data, 0, nRead);
 		}
 		buffer.flush();
+		return buffer.toByteArray();
+	}
+	
+	public static byte[] readBytes(String path) throws Exception{
+		InputStream input = new FileInputStream(new File(path));
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		byte[] data = new byte[1024];
+		int nRead;
+		
+		
+		while ((nRead = input.read(data, 0, data.length)) != -1){
+			buffer.write(data, 0, nRead);
+		}
+		buffer.flush();
+		input.close();
 		return buffer.toByteArray();
 	}
 
