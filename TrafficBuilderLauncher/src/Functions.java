@@ -6,7 +6,6 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,15 +27,6 @@ public class Functions {
         return gv.getPixelBounds(null, x, y);
     }
 	
-	public static int getMaxFontSize(Graphics2D g2, String str, int maxWidth, int maxHeight){
-		int Counter = 1;
-		g2.setFont(g2.getFont().deriveFont(0, 1));
-		while(getStringBounds(g2, str, 0, 0).width < maxWidth && getStringBounds(g2, str, 0, 0).height <  maxHeight){
-			Counter++;
-			g2.setFont(g2.getFont().deriveFont(0, Counter));
-		}
-		return Counter - 1;
-	}
 	
 	public static void writeBytesToFile(byte[] Bytes, String path, boolean append){
 		FileOutputStream out;
