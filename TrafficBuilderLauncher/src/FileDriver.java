@@ -25,7 +25,7 @@ public class FileDriver  {
 			Functions.writeTextToFile("Default", System.getenv("APPDATA") + "\\TrafficBuilder\\SmallData\\LatestResources.txt", true);
 			Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/main.jar"), System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar", true);
 		}
-		//Runtime.getRuntime().exec("javaw -jar " + System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar -Xmx 1g");;
+		Runtime.getRuntime().exec("javaw -jar " + System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar -Xmx 1g");;
 		System.exit(0);
 	}
 	
