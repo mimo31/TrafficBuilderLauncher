@@ -23,18 +23,18 @@ public class FileDriver  {
 			Files.createDirectory(Functions.getInGameDirPath("\\SmallData"));
 			downloadDefaultResources();
 			Functions.writeTextToFile("Default", System.getenv("APPDATA") + "\\TrafficBuilder\\SmallData\\LatestResources.txt", true);
-			Functions.writeBytesToFile(Functions.downloadFile("http:\\gjk.cz\\~xfukv01\\TrafficBuilder\\main.jar"), System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar", true);
+			Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/main.jar"), System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar", true);
 		}
-		Runtime.getRuntime().exec("javaw -jar " + System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar -Xmx 1g");;
+		//Runtime.getRuntime().exec("javaw -jar " + System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar -Xmx 1g");;
 		System.exit(0);
 	}
 	
 	public static void getResource(String InternetName, String LocalName) throws Exception{
-		Functions.writeBytesToFile(Functions.downloadFile("http:\\gjk.cz\\~xfukv01\\TrafficBuilder\\" + InternetName), System.getenv("APPDATA") + "TrafficBuilder\\Resources\\Defualt\\" + LocalName, true);
+		Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/" + InternetName), System.getenv("APPDATA") + "\\TrafficBuilder\\Resources\\Default\\" + LocalName, true);
 	}
 	
 	public static void downloadDefaultResources() throws Exception{
 			Files.createDirectory(Functions.getInGameDirPath("\\Resources\\Default"));
-			getResource("Font.ttf", "Font.ttf");
+			getResource("Font.font", "Font.font");
 	}
 }
