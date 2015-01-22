@@ -36,5 +36,6 @@ public class FileDriver  {
 	public static void downloadDefaultResources() throws Exception{
 			Files.createDirectory(Functions.getInGameDirPath("\\Resources\\Default"));
 			getResource("Font.font", "Font.font");
+			getResource("pop1.png", "pop1.png");
 	}
 }

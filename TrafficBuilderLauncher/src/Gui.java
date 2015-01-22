@@ -1,10 +1,13 @@
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 
@@ -25,21 +28,19 @@ public class Gui extends JFrame{
 		Container Test = Variables.myGui.getContentPane();
 		Variables.height = Test.getHeight();
 		Variables.width = Test.getWidth();
-		Variables.myGui.add(new StartClass.paintIt());
+		Variables.myGui.add(new paintIt());
+	}
+	
+	public static class paintIt extends JComponent{
+		public void paint(Graphics g){
+			screen.paint(g);
+		}
 	}
 	
 	public class MouseEvents implements MouseListener{
-
 		
 		public void mouseClicked(MouseEvent e){
-			if(5 < e.getPoint().getX() && e.getPoint().getX() < 145 && Variables.height - 65 < e.getPoint().getY() && e.getPoint().getY() < Variables.height - 5){
-				try {
-					FileDriver.initializeFiles();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-			
+			screen.mouseClicked(e);
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
