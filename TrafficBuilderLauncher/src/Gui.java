@@ -5,10 +5,10 @@ import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.event.MouseInputAdapter;
 
 
 @SuppressWarnings("serial")
@@ -20,15 +20,17 @@ public class Gui extends JFrame{
 		this.setLocation(this.getWidth() / 2, this.getHeight() / 2);
 		this.setMinimumSize(new Dimension(200, 200));
 		this.setVisible(true);
-		this.getContentPane().addMouseListener(new MouseEvents());
+		this.getContentPane().addMouseListener(new InterfaceMouseEvents());
+		this.getContentPane().addMouseMotionListener(new InterfaceMouseEvents());
 		this.addComponentListener(new ComponentEvents());
+		this.add(new paintIt());
 	}
 	
 	public static void updateGui(){
 		Container Test = Variables.myGui.getContentPane();
 		Variables.height = Test.getHeight();
 		Variables.width = Test.getWidth();
-		Variables.myGui.add(new paintIt());
+		Variables.myGui.repaint();
 	}
 	
 	public static class paintIt extends JComponent{
@@ -37,7 +39,7 @@ public class Gui extends JFrame{
 		}
 	}
 	
-	public class MouseEvents implements MouseListener{
+	private class InterfaceMouseEvents extends MouseInputAdapter {
 		
 		public void mouseClicked(MouseEvent e){
 			screen.mouseClicked(e);
@@ -61,6 +63,13 @@ public class Gui extends JFrame{
 		public void mouseReleased(MouseEvent arg0) {
 			
 			
+		}
+
+		@Override
+		public void mouseMoved(final MouseEvent event) {
+			Variables.lastMousePosition = event.getPoint();
+			updateGui();
+			event.consume();
 		}
 		
 	}

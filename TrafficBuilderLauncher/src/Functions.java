@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.font.FontRenderContext;
@@ -15,6 +16,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 
 public class Functions {
 	public static Path getInGameDirPath(String InDirPath){
@@ -47,6 +49,20 @@ public class Functions {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void drawChangRect(final Graphics2D graph2, final Color normalColor, final Color onMouseColor, final int x, final int y, final int width, final int height){
+		if(new Rectangle(x, y, width, height).contains(Variables.lastMousePosition)){
+			graph2.setColor(onMouseColor);
+		}
+		else{
+			graph2.setColor(normalColor);
+		}
+		graph2.fillRect(x, y, width, height);
+	}
+
+	public static void drawChangRect(final Graphics2D graph2, final Color normalColor, final Color onMouseColor, final Rectangle rectangle){
+		drawChangRect(graph2, normalColor, onMouseColor, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 	
 	public static byte[] downloadFile(String address) throws Exception{
