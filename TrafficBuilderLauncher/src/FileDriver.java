@@ -1,18 +1,18 @@
-import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 
 
 public class FileDriver  {
-	public static void initializeFiles() throws Exception{
+	public static void runGame(String version) throws Exception{
 		if(Files.exists(Functions.getInGameDirPath(""))){
-			if(Files.exists(Functions.getInGameDirPath("\\Resources"))){
-				if(new File(System.getenv("APPDATA") + "\\TrafficBuilder\\Resources").listFiles() == null){
-					downloadDefaultResources();
-				}
-			}
-			else{
-				Files.createDirectory(Functions.getInGameDirPath("\\Resources"));
+			if(Files.exists(Functions.getInGameDirPath("\\Resources\\Default")) == false){
 				downloadDefaultResources();
+			}
+			if(isVersionOnLocal(version) == false){
+				downloadVersion(version);
+			}
+			if(Files.exists(Functions.getInGameDirPath("\\SmallData\\LatestResources.txt")) == false){
+				Functions.writeTextToFile("Default", System.getenv("APPDATA") + "\\TrafficBuilder\\SmallData\\LatestResources.txt", false);
 			}
 		}
 		else{
@@ -22,20 +22,88 @@ public class FileDriver  {
 			Files.createDirectory(Functions.getInGameDirPath("\\Game"));
 			Files.createDirectory(Functions.getInGameDirPath("\\SmallData"));
 			downloadDefaultResources();
-			Functions.writeTextToFile("Default", System.getenv("APPDATA") + "\\TrafficBuilder\\SmallData\\LatestResources.txt", true);
-			Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/main.jar"), System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar", true);
+			downloadVersion(version);
+			Functions.writeTextToFile("Default", System.getenv("APPDATA") + "\\TrafficBuilder\\SmallData\\LatestResources.txt", false);
 		}
-		Runtime.getRuntime().exec("javaw -jar " + System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main.jar -Xmx 1g");;
+		Runtime.getRuntime().exec("javaw -jar " + System.getenv("APPDATA") + "\\TrafficBuilder\\Game\\main" + version + ".jar -Xmx 1g");;
+		onClose();
 		System.exit(0);
 	}
 	
-	public static void getResource(String InternetName, String LocalName) throws Exception{
-		Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/" + InternetName), System.getenv("APPDATA") + "\\TrafficBuilder\\Resources\\Default\\" + LocalName, true);
+	public static void onLoad(){
+		getVersionList();
+		if(Files.exists(Functions.getInGameDirPath(""))){
+			Variables.lastChosenVersion = Functions.readTextFile(Functions.getInGameDirPath("\\SmallData\\LatestVersion.txt"));
+		}
+		else {
+			Variables.lastChosenVersion = "Latest";
+		}
 	}
 	
-	public static void downloadDefaultResources() throws Exception{
+	public static void onClose() {
+		if(Files.exists(Functions.getInGameDirPath("")) == false) {
+			try {
+				Files.createDirectory(Functions.getInGameDirPath(""));
+				Files.createDirectory(Functions.getInGameDirPath("\\Resources"));
+				Files.createDirectory(Functions.getInGameDirPath("\\Saves"));
+				Files.createDirectory(Functions.getInGameDirPath("\\Game"));
+				Files.createDirectory(Functions.getInGameDirPath("\\SmallData"));
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		Functions.writeTextToFile(Variables.lastChosenVersion, Functions.getInGameDirPath("\\SmallData\\LatestVersion.txt"), false);
+	}
+	
+	public static void downloadVersion(String version) {
+		Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/Mains/main" + version + ".jar"), Functions.getInGameDirPath("\\Game\\main" + version + ".jar"), false);
+	}
+	
+	public static boolean isVersionOnLocal(String version){
+		return Files.exists(Functions.getInGameDirPath("\\Game\\main" + version + ".jar"));
+	}
+	
+	public static void getVersionList(){
+		String ReadedFile = Functions.downloadTextFile("http://gjk.cz/~xfukv01/TrafficBuilder/Mains/METADATA.txt");
+		int counter = 0;
+		int counter2 = 0;
+		final char lineSeparator = System.getProperty("line.separator").toCharArray()[0];
+		int lineSeparatorCount = 0;
+		while(counter < ReadedFile.length()){
+			if(ReadedFile.toCharArray()[counter] == lineSeparator){
+				lineSeparatorCount++;
+			}
+			counter++;
+		}
+		Variables.versionList = new String[lineSeparatorCount + 1];
+		counter = 0;
+		while(counter < ReadedFile.length()){
+			if(ReadedFile.toCharArray()[counter] == lineSeparator){
+				Variables.versionList[counter2] = ReadedFile.substring(0, counter);
+				ReadedFile = ReadedFile.substring(counter + 2);
+				counter = 0;
+				counter2++;
+			}
+			else{
+				counter++;
+			}
+		}
+		Variables.versionList[counter2] = ReadedFile;
+	}
+	
+	public static void getResource(String InternetName, String LocalName) throws Exception{
+		Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/Resources/" + InternetName), System.getenv("APPDATA") + "\\TrafficBuilder\\Resources\\Default\\" + LocalName, true);
+	}
+	
+	public static void downloadDefaultResources() {
+		try{
 			Files.createDirectory(Functions.getInGameDirPath("\\Resources\\Default"));
 			getResource("Font.font", "Font.font");
 			getResource("pop1.png", "pop1.png");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

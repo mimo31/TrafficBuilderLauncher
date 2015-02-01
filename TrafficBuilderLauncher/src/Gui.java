@@ -23,6 +23,12 @@ public class Gui extends JFrame{
 		this.getContentPane().addMouseListener(new InterfaceMouseEvents());
 		this.getContentPane().addMouseMotionListener(new InterfaceMouseEvents());
 		this.addComponentListener(new ComponentEvents());
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(final java.awt.event.WindowEvent windowEvent) {
+				FileDriver.onClose();
+			}
+		});
 		this.add(new paintIt());
 	}
 	
@@ -55,18 +61,22 @@ public class Gui extends JFrame{
 			
 		}
 
-		public void mousePressed(MouseEvent arg0) {
-			
-			
+		public void mousePressed(MouseEvent e) {
+			screen.mousePressed(e);
 		}
 
-		public void mouseReleased(MouseEvent arg0) {
-			
-			
+		public void mouseReleased(MouseEvent e) {
+			screen.mouseReleased(e);
 		}
 
 		@Override
 		public void mouseMoved(final MouseEvent event) {
+			Variables.lastMousePosition = event.getPoint();
+			updateGui();
+			event.consume();
+		}
+		
+		public void mouseDragged(final MouseEvent event){
 			Variables.lastMousePosition = event.getPoint();
 			updateGui();
 			event.consume();

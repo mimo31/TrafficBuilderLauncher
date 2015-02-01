@@ -16,6 +16,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 
 public class Functions {
@@ -29,6 +30,9 @@ public class Functions {
         return gv.getPixelBounds(null, x, y);
     }
 	
+	public static void writeBytesToFile(byte[] Bytes, Path path, boolean append){
+		writeBytesToFile(Bytes, path.toString(), append);
+	}
 	
 	public static void writeBytesToFile(byte[] Bytes, String path, boolean append){
 		FileOutputStream out;
@@ -41,9 +45,13 @@ public class Functions {
 		}
 	}
 	
+	public static void writeTextToFile(String text, Path path, boolean append){
+		writeTextToFile(text, path.toString(), append);
+	}
+	
 	public static void writeTextToFile(String text, String path, boolean append){
 		try {
-			BufferedWriter bufw = new BufferedWriter(new FileWriter(path, true));
+			BufferedWriter bufw = new BufferedWriter(new FileWriter(path, append));
 			bufw.write(text);
 			bufw.close();
 		} catch (IOException e) {
@@ -60,25 +68,57 @@ public class Functions {
 		}
 		graph2.fillRect(x, y, width, height);
 	}
+	
+	public static String downloadTextFile(final String address){
+		String output = null;
+		try {
+			final URL fileURL = new URL(address);
+			Scanner fileScanner;
+			fileScanner = new Scanner(fileURL.openStream());
+			output = fileScanner.nextLine();
+			while(fileScanner.hasNextLine()){
+				output = output + System.getProperty("line.separator") + fileScanner.nextLine();
+			}
+			fileScanner.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return output;
+	}
 
 	public static void drawChangRect(final Graphics2D graph2, final Color normalColor, final Color onMouseColor, final Rectangle rectangle){
 		drawChangRect(graph2, normalColor, onMouseColor, rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 	
-	public static byte[] downloadFile(String address) throws Exception{
-		URL url = new URL(address);
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		InputStream is = url.openStream();
-		
-		byte[] data = new byte[1024];
-		int nRead;
-		
-		
-		while ((nRead = is.read(data, 0, data.length)) != -1){
-			buffer.write(data, 0, nRead);
+	public static byte[] downloadFile(String address) {
+		URL url = null;
+		try {
+			url = new URL(address);
 		}
-		buffer.flush();
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		try {
+			InputStream is = url.openStream();
+			
+			byte[] data = new byte[1024];
+			int nRead;
+			
+			
+			while ((nRead = is.read(data, 0, data.length)) != -1){
+				buffer.write(data, 0, nRead);
+			}
+			buffer.flush();
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 		return buffer.toByteArray();
+	}
+	
+	public static Rectangle addBounds(final Rectangle startingRect, final int bounds){
+		return new Rectangle(startingRect.x + bounds, startingRect.y + bounds, startingRect.width - bounds * 2, startingRect.height - bounds * 2);
 	}
 	
 	public static byte[] readBytes(String path) throws Exception{
@@ -86,8 +126,6 @@ public class Functions {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		byte[] data = new byte[1024];
 		int nRead;
-		
-		
 		while ((nRead = input.read(data, 0, data.length)) != -1){
 			buffer.write(data, 0, nRead);
 		}
@@ -96,11 +134,14 @@ public class Functions {
 		return buffer.toByteArray();
 	}
 
-	public static String readTextFile(String path){
+	public static String readTextFile(final String path){
+		return readTextFile(Paths.get(path));
+	}
+	
+	public static String readTextFile(final Path path){
 		String[] ReadedLines = null;
-		Path filePath = Paths.get(path);
 		try {
-			ReadedLines =  Files.readAllLines(filePath, Charset.defaultCharset()).toArray(new String[0]);
+			ReadedLines =  Files.readAllLines(path, Charset.defaultCharset()).toArray(new String[0]);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

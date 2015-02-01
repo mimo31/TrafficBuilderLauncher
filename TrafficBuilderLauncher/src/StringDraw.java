@@ -19,11 +19,8 @@ public class StringDraw {
 		return getStringBounds(graph2, "h h", 0, 0).width - getStringBounds(graph2, "hh", 0, 0).width;
 	}
 
-	public static void drawMaxString(final Graphics2D graph2, final int borderSize, final String str, final int align, Rectangle bounds, final int fontType){
-		bounds.x = bounds.x + borderSize;
-		bounds.y = bounds.y + borderSize;
-		bounds.width = bounds.width - borderSize * 2;
-		bounds.height = bounds.height - borderSize * 2;
+	public static void drawMaxString(final Graphics2D graph2, final int borderSize, final String str, final int align, final Rectangle textBounds, final int fontType){
+		final Rectangle bounds = new Rectangle(textBounds.x + borderSize, textBounds.y + borderSize, textBounds.width - 2 * borderSize, textBounds.height - 2 * borderSize);
 		if(bounds.width > 0 && bounds.height > 0){
 			graph2.setFont(graph2.getFont().deriveFont(fontType, 101f));
 			Rectangle s1Size = getStringBounds(graph2, str, 0, 0);
