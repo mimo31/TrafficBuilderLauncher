@@ -2,11 +2,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 
-public class FileDriver  {
+public class FileDriver {
 	public static void runGame(String version) throws Exception{
 		if(Files.exists(Functions.getInGameDirPath(""))){
 			if(Files.exists(Functions.getInGameDirPath("\\Resources\\Default")) == false){
 				downloadDefaultResources();
+			}
+			else {
+				updateDefaultResources();
 			}
 			if(isVersionOnLocal(version) == false){
 				downloadVersion(version);
@@ -92,18 +95,81 @@ public class FileDriver  {
 		Variables.versionList[counter2] = ReadedFile;
 	}
 	
-	public static void getResource(String InternetName, String LocalName) throws Exception{
-		Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/Resources/" + InternetName), System.getenv("APPDATA") + "\\TrafficBuilder\\Resources\\Default\\" + LocalName, true);
+	public static void getResource(String name) throws Exception{
+		Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/Resources/" + name), System.getenv("APPDATA") + "\\TrafficBuilder\\Resources\\Default\\" + name, true);
 	}
 	
 	public static void downloadDefaultResources() {
 		try{
 			Files.createDirectory(Functions.getInGameDirPath("\\Resources\\Default"));
-			getResource("Font.font", "Font.font");
-			getResource("pop1.png", "pop1.png");
+			final String metaText = Functions.downloadTextFile("http://gjk.cz/~xfukv01/TrafficBuilder/Resources/METADATA.txt");
+			final Resource[] resources = getAllResources(metaText);
+			Functions.writeTextToFile(metaText, Functions.getInGameDirPath("\\Resources\\Default\\METADATA.txt"), false);
+			int counter = 0;
+			while(counter < resources.length){
+				getResource(resources[counter].name);
+				counter++;
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void updateDefaultResources() throws Exception{
+		final String localMeta = Functions.readTextFile(Functions.getInGameDirPath("\\Resources\\Default\\METADATA.txt"));
+		final String serverMeta = Functions.downloadTextFile("http://gjk.cz/~xfukv01/TrafficBuilder/Resources/METADATA.txt");
+		final Resource[] localResources = getAllResources(localMeta);
+		final Resource[] serverResources = getAllResources(serverMeta);
+		int counter = 0;
+		while(counter < serverResources.length){
+			int counter2 = 0;
+			while(counter2 < localResources.length && localResources[counter2].name.equals(serverResources[counter]) == false){
+				counter2++;
+			}
+			if(counter2 == localResources.length){
+				getResource(serverResources[counter].name);
+			}
+			else {
+				if(serverResources[counter].version.equals(localResources[counter2].version) == false){
+					getResource(serverResources[counter].name);
+				}
+			}
+			counter++;
+		}
+		Functions.writeTextToFile(serverMeta, Functions.getInGameDirPath("\\Resources\\Default\\METADATA.txt"), false);
+	}
+	
+	public static Resource[] getAllResources(String text){
+		int counter = 0;
+		int newLines = 0;
+		while(counter < text.length()){
+			if(text.toCharArray()[counter] == '\r'){
+				newLines++;
+			}
+			counter++;
+		}
+		String[] lines = new String[newLines + 1];
+		Resource[] resources = new Resource[newLines + 1];
+		counter = 0;
+		int counter2 = 0;
+		while(counter < text.length()){
+			if(text.toCharArray()[counter] == '\r'){
+				lines[counter2] = text.substring(0, counter);
+				text = text.substring(counter + 2);
+				counter = 0;
+				counter2++;
+			}
+			else{
+				counter++;
+			}
+		}
+		lines[counter2] = text;
+		counter = 0;
+		while(counter < lines.length){
+			resources[counter] = new Resource(lines[counter]);
+			counter++;
+		}
+		return resources;
 	}
 }

@@ -98,7 +98,6 @@ public class Gui extends JFrame{
 
 		public void componentResized(ComponentEvent arg0) {
 			updateGui();
-			
 		}
 
 		public void componentShown(ComponentEvent arg0) {

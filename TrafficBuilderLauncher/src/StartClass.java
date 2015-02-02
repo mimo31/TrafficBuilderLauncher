@@ -6,8 +6,6 @@ public class StartClass {
 		FileDriver.onLoad();
 		Variables.myGui = new Gui();
 		Gui.updateGui();
-		System.out.println("The First one: " + Variables.versionList[0]);
-		System.out.println("The Second one: " + Variables.versionList[1]);
 	}
 	
 }
