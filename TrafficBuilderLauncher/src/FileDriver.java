@@ -60,7 +60,7 @@ public class FileDriver {
 	}
 	
 	public static void downloadVersion(String version) {
-		Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/Mains/main" + version + ".jar"), Functions.getInGameDirPath("\\Game\\main" + version + ".jar"), false);
+		Functions.writeBytesToFile(Functions.downloadFile("http://gjk.cz/~xfukv01/TrafficBuilder/Versions/main" + version + ".jar"), Functions.getInGameDirPath("\\Game\\main" + version + ".jar"), false);
 	}
 	
 	public static boolean isVersionOnLocal(String version){
@@ -68,7 +68,7 @@ public class FileDriver {
 	}
 	
 	public static void getVersionList(){
-		String ReadedFile = Functions.downloadTextFile("http://gjk.cz/~xfukv01/TrafficBuilder/Mains/METADATA.txt");
+		String ReadedFile = Functions.downloadTextFile("http://gjk.cz/~xfukv01/TrafficBuilder/Versions/METADATA.txt");
 		int counter = 0;
 		int counter2 = 0;
 		final char lineSeparator = System.getProperty("line.separator").toCharArray()[0];
